@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FailedResource;
+use App\Http\Resources\SuccessResource;
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class NoteController extends Controller
 {
@@ -13,7 +16,14 @@ class NoteController extends Controller
      */
     public function index()
     {
-        //
+        $notes = Note::all();
+        $return = [
+            'api_code' => 200,
+            'api_status' => true,
+            'api_message' => 'Sukses',
+            'api_results' => $notes
+        ];
+        return SuccessResource::make($return);
     }
 
     /**
@@ -21,7 +31,26 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->title && $request->content) {
+            $note = Note::create([
+                'title' => $request->title,
+                'content' => $request->content
+            ]);
+            $return = [
+                'api_code' => 200,
+                'api_status' => true,
+                'api_message' => 'Sukses',
+                'api_results' => $note
+            ];
+            return SuccessResource::make($return);
+        } else {
+            $return = [
+                'api_code' => Response::HTTP_BAD_REQUEST,
+                'api_status' => false,
+                'api_message' => 'Pastikan field Title & Content terisi!'
+            ];
+            return FailedResource::make($return);
+        }
     }
 
     /**
@@ -45,6 +74,13 @@ class NoteController extends Controller
      */
     public function destroy(Note $note)
     {
-        //
+        $return = [
+            'api_code' => 200,
+            'api_status' => true,
+            'api_message' => 'Sukses Terhapus.',
+            'api_results' => $note
+        ];
+        $note->delete();
+        return SuccessResource::make($return);
     }
 }
