@@ -66,7 +66,17 @@ class NoteController extends Controller
      */
     public function update(Request $request, Note $note)
     {
-        //
+        $note->update([
+            'title' => $request->title ?? $note->title,
+            'content' => $request->content ?? $note->content,
+        ]);
+        $return = [
+            'api_code' => 200,
+            'api_status' => true,
+            'api_message' => 'Sukses',
+            'api_results' => $note
+        ];
+        return SuccessResource::make($return);
     }
 
     /**

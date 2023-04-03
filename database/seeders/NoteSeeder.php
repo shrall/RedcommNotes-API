@@ -13,9 +13,11 @@ class NoteSeeder extends Seeder
      */
     public function run(): void
     {
-        $note = new Note();
-        $note->title = 'Belanja Bulanan';
-        $note->content = "Sabun, Minyak, Shampoo, dll.";
-        $note->save();
+        for ($x = 0; $x <= 10; $x++) {
+            $note = new Note();
+            $note->title = "Title $x";
+            $note->content = "Content $x";
+            $note->save();
+        }
     }
 }
