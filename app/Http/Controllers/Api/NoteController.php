@@ -14,9 +14,10 @@ class NoteController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $notes = Note::all();
+        $notes = Note::where('title', 'like', '%' . $request->search . '%')
+            ->orWhere('content', 'like', '%' . $request->search . '%')->paginate(10);
         $return = [
             'api_code' => 200,
             'api_status' => true,
